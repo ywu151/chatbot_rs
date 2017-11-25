@@ -28,10 +28,14 @@ app.post('/get_story', urlencodedParser, function (req, res) {
        content = results[0]['title'] + '\n' + results[0]['content'];
        console.log('Content: ', content);
        var response = {
-           'content': content
+           'speech': content,
+	   'displayText': results[0]['title'],
+	   'data': {},
+	   'contextOut': [],
+ 	   'source': 'RS'
        };
        console.log(response);
-       res.send(content);
+       res.send(JSON.stringify(response));
    });
 })
  
