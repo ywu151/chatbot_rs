@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 
-const urlencodedParser = bodyParser.urlencoded({ extended: false })
+const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 app.get('/', function (req, res) {
    res.sendFile( __dirname + "/" + "index.htm" );
@@ -13,6 +13,7 @@ app.get('/test', function (req, res) {
 });
  
 app.post('/get_story', urlencodedParser, function (req, res) {
+   console.log('req.body', req.body);
    var profileId = Number(req.body.sessionId);
    var timeStamp = Date.now();
     console.log('clientId: ', profileId);
