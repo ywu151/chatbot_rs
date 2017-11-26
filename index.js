@@ -2,6 +2,8 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 
+
+
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 app.get('/', function (req, res) {
@@ -21,11 +23,11 @@ app.post('/get_story', urlencodedParser, function (req, res) {
         'contextOut': [],
         'source': 'RS'
     };
-    if(!req.body.hasOwnProperty('sessionId')){
+    if(!req.body.data || req.body.data.sessionId){
         console.log('没有找到故事');
         res.send(JSON.stringify(response));
     } else {
-        var profileId = Number(req.body.sessionId);
+        var profileId = Number(req.body.data.sessionId);
         var timeStamp = Date.now();
         console.log('clientId: ', profileId);
         console.log('timeStamp: ', timeStamp);
