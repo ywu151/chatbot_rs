@@ -3,8 +3,12 @@ const app = express();
 const bodyParser = require('body-parser');
 
 
+app.use(bodyParser.json({limit: '1mb'}));  //body-parser 解析json格式数据
+app.use(bodyParser.urlencoded({            //此项必须在 bodyParser.json 下面,为参数编码
+    extended: true
+}));
 
-const urlencodedParser = bodyParser.urlencoded({ extended: false });
+//const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 app.get('/', function (req, res) {
    res.sendFile( __dirname + "/" + "index.htm" );
@@ -14,7 +18,7 @@ app.get('/test', function (req, res) {
     res.sendFile( __dirname + "/" + "test_index.htm" );
 });
  
-app.post('/get_story', urlencodedParser, function (req, res) {
+app.post('/get_story', function (req, res) {
     console.log('req.body', req.body);
     var response = {
         'speech': '没有找到故事',
@@ -23,11 +27,11 @@ app.post('/get_story', urlencodedParser, function (req, res) {
         'contextOut': [],
         'source': 'RS'
     };
-    if(!req.body.data || req.body.data.sessionId){
+    if(! req.body.hasOwnProperty('sessionId')){
         console.log('没有找到故事');
         res.send(JSON.stringify(response));
     } else {
-        var profileId = Number(req.body.data.sessionId);
+        var profileId = Number(req.body['sessionId']);
         var timeStamp = Date.now();
         console.log('clientId: ', profileId);
         console.log('timeStamp: ', timeStamp);
