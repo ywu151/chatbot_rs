@@ -54,19 +54,23 @@ app.post('/get_story', function (req, res) {
 
         var addLog = new Promise(
             function (resolve, reject) {
-                connection.query(addSql, addSqlParams,function (err, result) {
-                    if(err){
-                        console.log('[INSERT ERROR] - ',err.message);
-                        reject(err.message);
-                    }
-                    else {
-                        console.log('---- INSERT LOG----');
-                        console.log('INSERT ID:',result);
-                        console.log('--------------------\n\n');
-                        resolve(storyId);
-                    }
+                if (!isNaN(profileId)) {
+                    connection.query(addSql, addSqlParams, function (err, result) {
+                        if (err) {
+                            console.log('[INSERT ERROR] - ', err.message);
+                            reject(err.message);
+                        }
+                        else {
+                            console.log('---- INSERT LOG----\nINSERT ID:'
+                                + result + '--------------------\n\n');
+                            resolve(storyId);
+                        }
 
-                });
+                    });
+                } else {
+                    console.log('CAN NOT FIND CLIENT ID\n--------------------\n\n');
+                    resolve(storyId);
+                }
             }
         );
 
@@ -77,11 +81,11 @@ app.post('/get_story', function (req, res) {
                     console.log('StoryId: ', storyId);
                     title = results[0]['title'];
                     content = title + '\n' + results[0]['content'];
-                    console.log('Content: ', content);
                     response['speech'] = content;
                     response['displayText'] = title;
                     console.log('response:');
                     console.log(response);
+                    console.log('--------------------\n\n\n\n\n');
                     res.send(JSON.stringify(response));
                 });
             }).catch(function(error){
